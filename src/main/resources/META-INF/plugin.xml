@@ -1,0 +1,23 @@
+<idea-plugin>
+    <id>cn.itscloudy.infocommit</id>
+    <name>InfoCommit</name>
+    <version>1.0.0</version>
+    <vendor email="iiim.cloudy@gmail.com" url="https://cloudyant.github.io/">InfoCommit</vendor>
+
+    <idea-version since-build="222"/>
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
+    <extensions defaultExtensionNs="com.intellij">
+        <postStartupActivity implementation="cn.itscloudy.infocommit.context.IcStartupActivity"/>
+        <checkinHandlerFactory implementation="cn.itscloudy.infocommit.IcCheckinHandlerFactory"/>
+    </extensions>
+    <actions>
+        <action class="cn.itscloudy.infocommit.IcAction"
+                description="Open infoCommit configuration"
+                id="cn.itscloudy.infocommit.IcAction"
+                text="InfoCommit Configuration"
+                icon="/icons/favicon.png">
+            <add-to-group group-id="Vcs.Commit.PrimaryCommitActions" anchor="first"/>
+        </action>
+    </actions>
+</idea-plugin>
