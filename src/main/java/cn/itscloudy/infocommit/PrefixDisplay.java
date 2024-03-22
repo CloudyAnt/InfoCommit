@@ -65,17 +65,7 @@ public class PrefixDisplay {
 
     private void makePrefixConfigStarter(JComponent component) {
         component.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        component.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                showPrefixConfigDialog();
-            }
-        });
-    }
-
-    private void showPrefixConfigDialog() {
-        JBPopup popup = prefixConfigPopupBuilder.createPopup();
-        popup.showUnderneathOf(displayPane);
+        component.addMouseListener(new PrefixConfigStartListener());
     }
 
     public void updateLabelAndCache() {
@@ -85,5 +75,17 @@ public class PrefixDisplay {
 
     public String getPrefix() {
         return prefixConfig.getPrefix();
+    }
+
+    private class PrefixConfigStartListener extends MouseAdapter {
+        private boolean show = true;
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (show) {
+                JBPopup popup = prefixConfigPopupBuilder.createPopup();
+                popup.showUnderneathOf(displayPane);
+            }
+            show = !show;
+        }
     }
 }

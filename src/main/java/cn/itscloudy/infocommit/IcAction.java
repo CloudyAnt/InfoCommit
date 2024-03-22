@@ -1,13 +1,11 @@
 package cn.itscloudy.infocommit;
 
-import cn.itscloudy.infocommit.context.IcProjectContext;
 import cn.itscloudy.infocommit.context.IcProjectContextManager;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.ui.components.JBPanel;
 import com.intellij.vcs.commit.CommitProjectPanelAdapter;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,29 +28,45 @@ public class IcAction extends AnAction {
             return;
         }
 
-        Object data = e.getDataContext().getData("Panel");
-        if (data != lastUpdatedData && data instanceof CommitProjectPanelAdapter adapter) {
-            lastUpdatedData = data;
-            IcProjectContext projectContext = IcProjectContextManager.getInstance(project);
-            final PrefixDisplay prefixDisplay = projectContext.getPrefixDisplay();
-            if (prefixDisplay == null) {
-                return;
-            }
+        PrefixDisplay prefixDisplay = IcProjectContextManager.getInstance(project).getPrefixDisplay();
+        if (prefixDisplay == null) {
+            return;
+        }
 
+        String place = e.getPlace();
+        if (place.equals("CommitMessage")) {
+            // commit using dialog
+            updateDialog(e, prefixDisplay);
+        } else if (place.equals("ChangesView.CommitButtonsToolbar") || place.equals("ChangesView.CommitToolbar")) {
+            // commit using tool window
+            updateToolWindow(e, prefixDisplay);
+        }
+    }
+
+    private void updateDialog(@NotNull AnActionEvent e,
+                              @NotNull PrefixDisplay prefixDisplay) {
+        Object messageControl = e.getDataContext().getData("COMMIT_MESSAGE_CONTROL");
+        if (messageControl != lastUpdatedData && messageControl instanceof JComponent) {
+            lastUpdatedData = messageControl;
+            ApplicationManager.getApplication().invokeLater(() -> {
+                JComponent holderComp = (JComponent) ((JComponent) messageControl).getComponents()[1];
+                holderComp.add(prefixDisplay.getRoot(), BorderLayout.SOUTH);
+            });
+
+        }
+    }
+
+    private void updateToolWindow(@NotNull AnActionEvent e,
+                                  @NotNull PrefixDisplay prefixDisplay) {
+        Object panel = e.getDataContext().getData("Panel");
+        if (panel != lastUpdatedData && panel instanceof CommitProjectPanelAdapter adapter) {
+            lastUpdatedData = panel;
             ApplicationManager.getApplication().invokeLater(() -> {
                 JComponent adapterComp = adapter.getComponent();
-                Component originalComp;
-                if (adapterComp == null || (originalComp = adapterComp.getComponents()[0]) == null) {
+                if (adapterComp == null) {
                     return;
                 }
-                adapterComp.removeAll();
-
-                NewComp newComp = new NewComp();
-                newComp.setLayout(new BorderLayout());
-
-                newComp.add(prefixDisplay.getRoot(), BorderLayout.NORTH);
-                newComp.add(originalComp, BorderLayout.CENTER);
-                adapterComp.add(newComp);
+                adapterComp.add(prefixDisplay.getRoot(), BorderLayout.NORTH);
             });
         }
     }
@@ -60,9 +74,5 @@ public class IcAction extends AnAction {
     @Override
     public @NotNull ActionUpdateThread getActionUpdateThread() {
         return super.getActionUpdateThread();
-    }
-
-    private static class NewComp extends JBPanel<NewComp> {
-        // If you use JPanel directly, the layout will be wrong, may stick the whole IDE
     }
 }
