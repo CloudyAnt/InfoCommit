@@ -43,7 +43,6 @@ public class PrefixDisplay {
             }
         });
 
-
         displayPane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         displayPane.setBorder(new RoundCornerBorder(6, 1, BORDER_COLOR));
 
@@ -78,14 +77,25 @@ public class PrefixDisplay {
     }
 
     private class PrefixConfigStartListener extends MouseAdapter {
-        private boolean show = true;
+        private long hideAt = 0;
+        private final JBPopupListener popupListener;
+
+        PrefixConfigStartListener() {
+            popupListener = new JBPopupListener() {
+                @Override
+                public void onClosed(@NotNull LightweightWindowEvent event) {
+                    hideAt = System.currentTimeMillis();
+                }
+            };
+        }
         @Override
-        public void mouseClicked(MouseEvent e) {
-            if (show) {
-                JBPopup popup = prefixConfigPopupBuilder.createPopup();
-                popup.showUnderneathOf(displayPane);
+        public synchronized void mousePressed(MouseEvent e) {
+            if (System.currentTimeMillis() - hideAt < 100) {
+                return;
             }
-            show = !show;
+            JBPopup popup = prefixConfigPopupBuilder.createPopup();
+            popup.addListener(popupListener);
+            popup.showUnderneathOf(displayPane);
         }
     }
 }
