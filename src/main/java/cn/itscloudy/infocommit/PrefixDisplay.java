@@ -45,7 +45,6 @@ public class PrefixDisplay {
 
 
         displayPane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        displayPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         displayPane.setBorder(new RoundCornerBorder(6, 1, BORDER_COLOR));
 
         JLabel prefixHead = new JLabel();
@@ -58,7 +57,15 @@ public class PrefixDisplay {
 
         displayPane.add(prefixHead);
         displayPane.add(prefixLabel);
-        displayPane.addMouseListener(new MouseAdapter() {
+
+        makePrefixConfigStarter(displayPane);
+        makePrefixConfigStarter(prefixHead);
+        makePrefixConfigStarter(prefixLabel);
+    }
+
+    private void makePrefixConfigStarter(JComponent component) {
+        component.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        component.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 showPrefixConfigDialog();

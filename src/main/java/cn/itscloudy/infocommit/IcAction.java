@@ -7,6 +7,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.ui.components.JBPanel;
 import com.intellij.vcs.commit.CommitProjectPanelAdapter;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,7 +47,7 @@ public class IcAction extends AnAction {
                 }
                 adapterComp.removeAll();
 
-                JPanel newComp = new JPanel();
+                NewComp newComp = new NewComp();
                 newComp.setLayout(new BorderLayout());
 
                 newComp.add(prefixDisplay.getRoot(), BorderLayout.NORTH);
@@ -59,5 +60,9 @@ public class IcAction extends AnAction {
     @Override
     public @NotNull ActionUpdateThread getActionUpdateThread() {
         return super.getActionUpdateThread();
+    }
+
+    private static class NewComp extends JBPanel<NewComp> {
+        // If you use JPanel directly, the layout will be wrong, may stick the whole IDE
     }
 }
