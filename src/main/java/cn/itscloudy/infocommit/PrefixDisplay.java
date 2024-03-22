@@ -13,13 +13,15 @@ import java.awt.event.MouseEvent;
 
 public class PrefixDisplay {
     private static final String PREFIX_HEAD = " " + IcConst.get("prefix") + " ";
-    private static final Color HEAD_COLOR = new JBColor(JBColor.decode("#CA8265"), JBColor.decode("#4E94DA"));
-    private static final Color BORDER_COLOR = new JBColor(JBColor.decode("#F8A662"), JBColor.decode("#6391F9"));
+    private static final Color HEAD_COLOR = decodeColor("#CA8265", "#4E94DA");
+    private static final Color BORDER_COLOR = decodeColor("#F8A662", "#6391F9");
 
     @Getter
     private JPanel root;
     private JPanel displayPane;
+    private JPanel amendModeNotice;
     private final JLabel prefixLabel;
+    private final JLabel prefixHead;
 
     private final StepCacheResolver stepCacheResolver;
     private final DefPrefixPattern messagePattern;
@@ -30,6 +32,8 @@ public class PrefixDisplay {
         this.stepCacheResolver = new StepCacheResolver(basePath);
         this.messagePattern = new DefPrefixPattern(project, stepCacheResolver);
         this.prefixConfig = new PrefixConfig(messagePattern);
+
+        root.setBorder(new RoundCornerBorder(6, 1, BORDER_COLOR));
         JPanel configPane = prefixConfig.getRoot();
         prefixConfigPopupBuilder = JBPopupFactory.getInstance().createComponentPopupBuilder(configPane, configPane)
                 .setResizable(true)
@@ -38,9 +42,8 @@ public class PrefixDisplay {
                 .setCancelOnWindowDeactivation(true);
 
         displayPane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        displayPane.setBorder(new RoundCornerBorder(6, 1, BORDER_COLOR));
 
-        JLabel prefixHead = new JLabel();
+        prefixHead = new JLabel();
         prefixHead.setText(PREFIX_HEAD);
         prefixHead.setOpaque(true);
         prefixHead.setBackground(HEAD_COLOR);
@@ -51,6 +54,7 @@ public class PrefixDisplay {
         displayPane.add(prefixHead);
         displayPane.add(prefixLabel);
 
+        amendModeNotice.setVisible(false);
         makePrefixConfigStarter(displayPane);
         makePrefixConfigStarter(prefixHead);
         makePrefixConfigStarter(prefixLabel);
@@ -58,7 +62,8 @@ public class PrefixDisplay {
 
     private void makePrefixConfigStarter(JComponent component) {
         component.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        component.addMouseListener(new PrefixConfigStartListener());
+        PrefixConfigStartListener listener = new PrefixConfigStartListener();
+        component.addMouseListener(listener);
     }
 
     public void updateLabel() {
@@ -75,11 +80,22 @@ public class PrefixDisplay {
         return prefixConfig.getPrefix();
     }
 
+    public void setAmendMode(boolean amendMode) {
+        amendModeNotice.setVisible(amendMode);
+        displayPane.setVisible(!amendMode);
+    }
+
+    private static JBColor decodeColor(String nm, String nmDark) {
+        return new JBColor(JBColor.decode(nm), JBColor.decode(nmDark));
+    }
+
     private class PrefixConfigStartListener extends MouseAdapter {
         private long hideAt = 0;
         private final JBPopupListener popupListener;
 
         PrefixConfigStartListener() {
+            setAmendMode(false);
+
             popupListener = new JBPopupListener() {
                 @Override
                 public void onClosed(@NotNull LightweightWindowEvent event) {
@@ -88,6 +104,7 @@ public class PrefixDisplay {
                 }
             };
         }
+
         @Override
         public synchronized void mousePressed(MouseEvent e) {
             if (System.currentTimeMillis() - hideAt < 100) {

@@ -2,10 +2,14 @@ package cn.itscloudy.infocommit;
 
 import cn.itscloudy.infocommit.context.IcProjectContext;
 import cn.itscloudy.infocommit.context.IcProjectContextManager;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.vcs.CheckinProjectPanel;
+import com.intellij.openapi.vcs.VcsActions;
 import com.intellij.openapi.vcs.changes.CommitContext;
 import com.intellij.openapi.vcs.checkin.CheckinHandler;
 import com.intellij.openapi.vcs.checkin.CheckinHandlerFactory;
+import com.intellij.util.keyFMap.KeyFMap;
+import com.intellij.vcs.commit.AbstractCommitWorkflow;
 import org.jetbrains.annotations.NotNull;
 
 public class IcCheckinHandlerFactory extends CheckinHandlerFactory {
@@ -16,7 +20,7 @@ public class IcCheckinHandlerFactory extends CheckinHandlerFactory {
             @Override
             public ReturnResult beforeCheckin() {
                 IcProjectContext projectContext = IcProjectContextManager.getInstance(panel.getProject());
-                if (projectContext != null) {
+                if (projectContext != null && !projectContext.isAmendMode()) {
                     PrefixDisplay prefixDisplay = projectContext.getPrefixDisplay();
                     if (prefixDisplay != null) {
                         String currentMessage = panel.getCommitMessage();

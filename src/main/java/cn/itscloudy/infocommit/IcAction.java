@@ -1,5 +1,6 @@
 package cn.itscloudy.infocommit;
 
+import cn.itscloudy.infocommit.context.IcProjectContext;
 import cn.itscloudy.infocommit.context.IcProjectContextManager;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -28,7 +29,8 @@ public class IcAction extends AnAction {
             return;
         }
 
-        PrefixDisplay prefixDisplay = IcProjectContextManager.getInstance(project).getPrefixDisplay();
+        IcProjectContext projectContext = IcProjectContextManager.getInstance(project);
+        PrefixDisplay prefixDisplay = projectContext.getPrefixDisplay();
         if (prefixDisplay == null) {
             return;
         }
@@ -39,7 +41,7 @@ public class IcAction extends AnAction {
             updateDialog(e, prefixDisplay);
         } else if (place.equals("ChangesView.CommitButtonsToolbar") || place.equals("ChangesView.CommitToolbar")) {
             // commit using tool window
-            updateToolWindow(e, prefixDisplay);
+            updateToolWindow(e, projectContext, prefixDisplay);
         }
     }
 
@@ -57,17 +59,24 @@ public class IcAction extends AnAction {
     }
 
     private void updateToolWindow(@NotNull AnActionEvent e,
+                                  @NotNull IcProjectContext projectContext,
                                   @NotNull PrefixDisplay prefixDisplay) {
         Object panel = e.getDataContext().getData("Panel");
-        if (panel != lastUpdatedData && panel instanceof CommitProjectPanelAdapter adapter) {
-            lastUpdatedData = panel;
-            ApplicationManager.getApplication().invokeLater(() -> {
-                JComponent adapterComp = adapter.getComponent();
-                if (adapterComp == null) {
-                    return;
-                }
-                adapterComp.add(prefixDisplay.getRoot(), BorderLayout.NORTH);
-            });
+        if (panel instanceof CommitProjectPanelAdapter adapter) {
+            String commitActionName = adapter.getCommitActionName();
+            boolean amendMode = commitActionName.contains("Amend") || commitActionName.contains("amend");
+            projectContext.setAmendMode(amendMode);
+            if (panel != lastUpdatedData) {
+                lastUpdatedData = panel;
+                ApplicationManager.getApplication().invokeLater(() -> {
+                    JComponent adapterComp = adapter.getComponent();
+                    if (adapterComp == null) {
+                        return;
+                    }
+                    adapterComp.add(prefixDisplay.getRoot(), BorderLayout.NORTH);
+                });
+            }
+            prefixDisplay.setAmendMode(amendMode);
         }
     }
 

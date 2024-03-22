@@ -3,6 +3,7 @@ package cn.itscloudy.infocommit.context;
 import cn.itscloudy.infocommit.PrefixDisplay;
 import com.intellij.openapi.project.Project;
 import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,6 +14,8 @@ public class IcProjectContext {
     private final Project project;
     private final String basePath;
     private PrefixDisplay prefixDisplay; // should be null if invalid
+    @Setter
+    private boolean amendMode;
 
     IcProjectContext(@NotNull Project project) {
         this.project = project;
