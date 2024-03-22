@@ -3,6 +3,7 @@ package cn.itscloudy.infocommit;
 import cn.itscloudy.infocommit.context.IcProjectContext;
 import cn.itscloudy.infocommit.context.IcProjectContextManager;
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vcs.CheckinProjectPanel;
 import com.intellij.openapi.vcs.VcsActions;
 import com.intellij.openapi.vcs.changes.CommitContext;
@@ -19,8 +20,16 @@ public class IcCheckinHandlerFactory extends CheckinHandlerFactory {
         return new CheckinHandler() {
             @Override
             public ReturnResult beforeCheckin() {
+                KeyFMap keyFMap = commitContext.get();
+                for (Key<?> key : keyFMap.getKeys()) {
+                    if (key.toString().equals("Vcs.Commit.IsAmendCommitMode")) {
+                        // no need to add prefix in amend mode
+                        return ReturnResult.COMMIT;
+                    }
+                }
+
                 IcProjectContext projectContext = IcProjectContextManager.getInstance(panel.getProject());
-                if (projectContext != null && !projectContext.isAmendMode()) {
+                if (projectContext != null) {
                     PrefixDisplay prefixDisplay = projectContext.getPrefixDisplay();
                     if (prefixDisplay != null) {
                         String currentMessage = panel.getCommitMessage();
