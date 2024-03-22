@@ -9,4 +9,7 @@ public interface CommitStep {
     JPanel getRoot();
 
     String getKey();
+
+    default void accept() {
+    }
 }

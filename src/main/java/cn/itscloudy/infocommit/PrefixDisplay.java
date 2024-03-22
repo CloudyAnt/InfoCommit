@@ -36,12 +36,6 @@ public class PrefixDisplay {
                 .setRequestFocus(true)
                 .setCancelOnClickOutside(true)
                 .setCancelOnWindowDeactivation(true);
-        prefixConfigPopupBuilder.addListener(new JBPopupListener() {
-            @Override
-            public void onClosed(@NotNull LightweightWindowEvent event) {
-                updateLabelAndCache();
-            }
-        });
 
         displayPane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         displayPane.setBorder(new RoundCornerBorder(6, 1, BORDER_COLOR));
@@ -52,7 +46,7 @@ public class PrefixDisplay {
         prefixHead.setBackground(HEAD_COLOR);
 
         prefixLabel = new JLabel();
-        prefixLabel.setText(getPrefix());
+        updateLabel();
 
         displayPane.add(prefixHead);
         displayPane.add(prefixLabel);
@@ -67,9 +61,14 @@ public class PrefixDisplay {
         component.addMouseListener(new PrefixConfigStartListener());
     }
 
-    public void updateLabelAndCache() {
+    public void updateLabel() {
         prefixLabel.setText(getPrefix());
+    }
+
+    public void updateCache() {
+        updateLabel();
         stepCacheResolver.update(messagePattern.getSteps());
+        messagePattern.acceptAll();
     }
 
     public String getPrefix() {
@@ -85,6 +84,7 @@ public class PrefixDisplay {
                 @Override
                 public void onClosed(@NotNull LightweightWindowEvent event) {
                     hideAt = System.currentTimeMillis();
+                    updateLabel();
                 }
             };
         }

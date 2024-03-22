@@ -13,15 +13,13 @@ public class InputStep implements CommitStep {
     @Getter
     private final String key;
     private final String name;
-    private final String defaultValue;
+    private String defaultValue;
     private StepSegmentImp stepSegment;
 
     public InputStep(String key, String name, String defaultValue) {
         this.key = key;
         this.name = name;
-        this.defaultValue = defaultValue;
-        TextPrompt tp = new TextPrompt(" " + defaultValue, field);
-        tp.setForeground(JBColor.GRAY);
+        updateDefaultValue(defaultValue);
     }
 
     public StepSegment getStepSegment() {
@@ -29,6 +27,22 @@ public class InputStep implements CommitStep {
             stepSegment = new StepSegmentImp();
         }
         return stepSegment;
+    }
+
+    @Override
+    public void accept() {
+        String text = field.getText();
+        if (!text.isEmpty()) {
+            field.setText("");
+            updateDefaultValue(text);
+        }
+    }
+
+    private void updateDefaultValue(String value) {
+        defaultValue = value;
+        field.removeAll();
+        TextPrompt tp = new TextPrompt(" " + defaultValue, field);
+        tp.setForeground(JBColor.GRAY);
     }
 
     private class StepSegmentImp extends StepSegment {

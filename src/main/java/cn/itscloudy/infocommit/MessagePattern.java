@@ -103,6 +103,12 @@ public abstract class MessagePattern {
         return sb.toString();
     }
 
+    public void acceptAll() {
+        for (CommitStep step : steps) {
+            step.accept();
+        }
+    }
+
     private static class TextSegment implements MessagePatternSegment {
         private final String value;
 

@@ -4,7 +4,7 @@ import com.intellij.openapi.project.Project;
 import lombok.Getter;
 
 @Getter
-public class DefPrefixPattern extends MessagePattern{
+public class DefPrefixPattern extends MessagePattern {
     private static final String[] DEF_SEGMENTS = new String[]{
             "[NAME]Name/姓名:$(git config user.email)",
             " ",
