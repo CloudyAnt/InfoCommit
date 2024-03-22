@@ -44,22 +44,14 @@ public class IcAction extends AnAction {
                 if (adapterComp == null || (originalComp = adapterComp.getComponents()[0]) == null) {
                     return;
                 }
-
                 adapterComp.removeAll();
-                FilledLayeredPane filledLayeredPane = new FilledLayeredPane(2);
-                JPanel bottomLayer = filledLayeredPane.getLayerPanel(1);
-                bottomLayer.setLayout(new GridLayout(1, 1));
-                bottomLayer.add(originalComp);
 
-                JPanel topLayer = filledLayeredPane.getLayerPanel(2);
-                topLayer.setLayout(null);
-                JPanel floater = prefixDisplay.getRoot();
-                Dimension preferredSize = floater.getPreferredSize();
-                floater.setBounds(0, preferredSize.height + 10, preferredSize.width, preferredSize.height);
-                topLayer.add(floater);
+                JPanel newComp = new JPanel();
+                newComp.setLayout(new BorderLayout());
 
-                adapterComp.add(filledLayeredPane);
-                Draggable.make(floater, floater, originalComp, prefixDisplay::togglePrefixConfigDialog);
+                newComp.add(prefixDisplay.getRoot(), BorderLayout.NORTH);
+                newComp.add(originalComp, BorderLayout.CENTER);
+                adapterComp.add(newComp);
             });
         }
     }

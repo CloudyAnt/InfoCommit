@@ -16,7 +16,7 @@
                 description="Open infoCommit configuration"
                 id="cn.itscloudy.infocommit.IcAction"
                 text="InfoCommit Configuration"
-                icon="/icons/favicon.png">
+                icon="/icons/blank.svg">
             <add-to-group group-id="Vcs.Commit.PrimaryCommitActions" anchor="first"/>
         </action>
     </actions>

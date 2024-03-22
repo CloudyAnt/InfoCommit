@@ -22,7 +22,7 @@ public class IcCheckinHandlerFactory extends CheckinHandlerFactory {
                         String currentMessage = panel.getCommitMessage();
                         String prefix = prefixDisplay.getPrefix();
                         panel.setCommitMessage(prefix + currentMessage);
-                        prefixDisplay.hidePrefixConfigAndUpdateCache();
+                        prefixDisplay.updateLabelAndCache();
                         return ReturnResult.COMMIT;
                     }
                 }
