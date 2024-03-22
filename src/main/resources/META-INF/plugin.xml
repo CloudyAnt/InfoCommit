@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>cn.itscloudy.infocommit</id>
     <name>InfoCommit</name>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <vendor email="iiim.cloudy@gmail.com" url="https://cloudyant.github.io/">InfoCommit</vendor>
 
     <idea-version since-build="222"/>
