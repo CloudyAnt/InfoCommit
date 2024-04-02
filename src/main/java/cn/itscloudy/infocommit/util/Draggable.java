@@ -1,4 +1,4 @@
-package cn.itscloudy.infocommit;
+package cn.itscloudy.infocommit.util;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;

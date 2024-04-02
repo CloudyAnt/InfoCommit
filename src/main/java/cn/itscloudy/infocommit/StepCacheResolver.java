@@ -1,6 +1,5 @@
 package cn.itscloudy.infocommit;
 
-import cn.itscloudy.infocommit.step.CommitStep;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,7 +7,6 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class StepCacheResolver {
@@ -29,10 +27,12 @@ public class StepCacheResolver {
         }
     }
 
-    public void update(List<CommitStep> steps) {
-        for (CommitStep step : steps) {
-            cache.put(step.getKey(), step.getStepSegment().getSegmentValue());
-        }
+    public void update(Pattern pattern) {
+        pattern.iterateOverSteps(step -> cache.put(step.getKey(), step.getSegmentValue()));
+        writeIntoFile();
+    }
+
+    private void writeIntoFile() {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, String> entry : cache.entrySet()) {
             sb.append(entry.getKey()).append("=").append(entry.getValue()).append("\n");

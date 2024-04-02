@@ -1,33 +1,31 @@
-package cn.itscloudy.infocommit.step;
+package cn.itscloudy.infocommit;
 
 import com.intellij.ui.JBColor;
-import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class RadioStep implements CommitStep {
+public class RadioStep extends Step {
     private static final Color[] colors = new Color[]{
             JBColor.RED, JBColor.GREEN, JBColor.YELLOW, JBColor.BLUE, JBColor.MAGENTA, JBColor.CYAN, JBColor.ORANGE
     };
 
-    @Getter
-    private JPanel root;
-    @Getter
-    private final String key;
     private final String name;
+    private final JPanel root;
     private final ButtonGroup group;
-    private StepSegmentImp stepSegment;
 
-    public RadioStep(String key, String name, String[] radioNames, String defaultValue) {
-        this.key = key;
+    RadioStep(String key, String name, String[] options, String defaultValue) {
+        super(key);
         this.name = name;
+
+        root = new JPanel();
         root.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
         group = new ButtonGroup();
 
         boolean hasDefault = false;
-        for (int i = 0; i < radioNames.length; i++) {
-            String radioName = radioNames[i];
+        for (int i = 0; i < options.length; i++) {
+            String radioName = options[i];
             JRadioButton radio = addRadio(i, radioName, group);
             if (radioName.equals(defaultValue)) {
                 hasDefault = true;
@@ -48,22 +46,22 @@ public class RadioStep implements CommitStep {
         return radio;
     }
 
-    public StepSegment getStepSegment() {
-        if (stepSegment == null) {
-            stepSegment = new StepSegmentImp();
-        }
-        return stepSegment;
+    @Override
+    @NotNull String getSegmentValue() {
+        return group.getSelection().getActionCommand();
     }
 
-    private class StepSegmentImp extends StepSegment {
+    @Override
+    @NotNull
+    JLabel getConfigLabel() {
+        JLabel label = createConfigLabel(name, JBColor.WHITE, Display.BORDER_COLOR);
+        label.setOpaque(true);
+        label.setBackground(Display.ACCENT_COLOR);
+        return label;
+    }
 
-        StepSegmentImp() {
-            super(name, root);
-        }
-
-        @Override
-        public String getSegmentValue() {
-            return group.getSelection().getActionCommand();
-        }
+    @Override
+    @NotNull FormStep getFormStep() {
+        return new FormStep(name, root);
     }
 }

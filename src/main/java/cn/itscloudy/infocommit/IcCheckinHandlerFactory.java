@@ -17,22 +17,13 @@ public class IcCheckinHandlerFactory extends CheckinHandlerFactory {
         return new CheckinHandler() {
             @Override
             public ReturnResult beforeCheckin() {
-                KeyFMap keyFMap = commitContext.get();
-                for (Key<?> key : keyFMap.getKeys()) {
-                    if (key.toString().equals("Vcs.Commit.IsAmendCommitMode")) {
-                        // no need to add prefix in amend mode
-                        return ReturnResult.COMMIT;
-                    }
-                }
-
                 IcProjectContext projectContext = IcProjectContextManager.getInstance(panel.getProject());
                 if (projectContext != null) {
-                    PrefixDisplay prefixDisplay = projectContext.getPrefixDisplay();
-                    if (prefixDisplay != null) {
-                        String currentMessage = panel.getCommitMessage();
-                        String prefix = prefixDisplay.getPrefix();
-                        panel.setCommitMessage(prefix + currentMessage);
-                        prefixDisplay.updateCache();
+                    Display display = projectContext.getDisplay();
+                    if (display != null && !display.isAmendMode()) {
+                        String message = display.instrumentMessage(panel.getCommitMessage());
+                        panel.setCommitMessage(message);
+                        display.updateCache();
                         return ReturnResult.COMMIT;
                     }
                 }

@@ -1,4 +1,4 @@
-package cn.itscloudy.infocommit;
+package cn.itscloudy.infocommit.util;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import org.jetbrains.annotations.NotNull;

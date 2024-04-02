@@ -30,29 +30,29 @@ public class IcAction extends AnAction {
         }
 
         IcProjectContext projectContext = IcProjectContextManager.getInstance(project);
-        PrefixDisplay prefixDisplay = projectContext.getPrefixDisplay();
-        if (prefixDisplay == null) {
+        Display display = projectContext.getDisplay();
+        if (display == null) {
             return;
         }
 
         String place = e.getPlace();
         if (place.equals("CommitMessage")) {
             // commit using dialog
-            updateDialog(e, prefixDisplay);
+            updateDialog(e, display);
         } else if (place.equals("ChangesView.CommitButtonsToolbar") || place.equals("ChangesView.CommitToolbar")) {
             // commit using tool window
-            updateToolWindow(e, projectContext, prefixDisplay);
+            updateToolWindow(e, projectContext, display);
         }
     }
 
     private void updateDialog(@NotNull AnActionEvent e,
-                              @NotNull PrefixDisplay prefixDisplay) {
+                              @NotNull Display display) {
         Object messageControl = e.getDataContext().getData("COMMIT_MESSAGE_CONTROL");
         if (messageControl != lastUpdatedData && messageControl instanceof JComponent) {
             lastUpdatedData = messageControl;
             ApplicationManager.getApplication().invokeLater(() -> {
                 JComponent holderComp = (JComponent) ((JComponent) messageControl).getComponents()[1];
-                holderComp.add(prefixDisplay.getRoot(), BorderLayout.SOUTH);
+                holderComp.add(display.getRoot(), BorderLayout.SOUTH);
             });
 
         }
@@ -60,7 +60,7 @@ public class IcAction extends AnAction {
 
     private void updateToolWindow(@NotNull AnActionEvent e,
                                   @NotNull IcProjectContext projectContext,
-                                  @NotNull PrefixDisplay prefixDisplay) {
+                                  @NotNull Display display) {
         Object panel = e.getDataContext().getData("Panel");
         if (panel instanceof CommitProjectPanelAdapter adapter) {
             String commitActionName = adapter.getCommitActionName();
@@ -73,10 +73,10 @@ public class IcAction extends AnAction {
                     if (adapterComp == null) {
                         return;
                     }
-                    adapterComp.add(prefixDisplay.getRoot(), BorderLayout.NORTH);
+                    adapterComp.add(display.getRoot(), BorderLayout.NORTH);
                 });
             }
-            prefixDisplay.setAmendMode(amendMode);
+            display.setAmendMode(amendMode);
         }
     }
 

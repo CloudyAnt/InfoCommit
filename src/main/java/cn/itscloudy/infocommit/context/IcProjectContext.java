@@ -1,6 +1,6 @@
 package cn.itscloudy.infocommit.context;
 
-import cn.itscloudy.infocommit.PrefixDisplay;
+import cn.itscloudy.infocommit.Display;
 import com.intellij.openapi.project.Project;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +13,7 @@ public class IcProjectContext {
     private final boolean valid;
     private final Project project;
     private final String basePath;
-    private PrefixDisplay prefixDisplay; // should be null if invalid
+    private Display display; // should be null if invalid
     @Setter
     private boolean amendMode;
 
@@ -30,17 +30,17 @@ public class IcProjectContext {
      * @return null if invalid
      */
     @Nullable
-    public PrefixDisplay getPrefixDisplay() {
+    public Display getDisplay() {
         if (!valid) {
             return null;
         }
         return synGetPrefixDisplay();
     }
 
-    private synchronized PrefixDisplay synGetPrefixDisplay() {
-        if (prefixDisplay == null) {
-            prefixDisplay = new PrefixDisplay(project, basePath);
+    private synchronized Display synGetPrefixDisplay() {
+        if (display == null) {
+            display = new Display(project, basePath);
         }
-        return prefixDisplay;
+        return display;
     }
 }
