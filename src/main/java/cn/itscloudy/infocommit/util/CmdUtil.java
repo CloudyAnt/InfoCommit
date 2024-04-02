@@ -1,8 +1,5 @@
 package cn.itscloudy.infocommit.util;
 
-import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -58,11 +55,7 @@ public class CmdUtil {
         return input;
     }
 
-    @Getter
-    public static class Result {
-        private final String output;
-        private final String error;
-        private final int exitValue;
+    public record Result(String output, String error, int exitValue) {
         public Result(String output, String error, int exitValue) {
             this.output = output == null ? "" : output.trim();
             this.error = error == null ? "" : error.trim();

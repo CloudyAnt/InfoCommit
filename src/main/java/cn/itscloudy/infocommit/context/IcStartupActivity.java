@@ -27,7 +27,7 @@ public class IcStartupActivity implements StartupActivity {
 
         CmdUtil.Result insideWorkTreeResult = CmdUtil
                 .runGitCommand(basePath, "rev-parse", "--is-inside-work-tree");
-        if (!"true".equals(insideWorkTreeResult.getOutput())) {
+        if (!"true".equals(insideWorkTreeResult.output())) {
             // no handling for project not in git work tree
             return;
         }

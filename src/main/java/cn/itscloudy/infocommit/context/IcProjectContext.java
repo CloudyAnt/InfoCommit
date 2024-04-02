@@ -26,6 +26,7 @@ public class IcProjectContext {
 
     /**
      * Get the prefix display
+     *
      * @return null if invalid
      */
     @Nullable

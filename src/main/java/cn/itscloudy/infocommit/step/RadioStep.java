@@ -16,14 +16,12 @@ public class RadioStep implements CommitStep {
     @Getter
     private final String key;
     private final String name;
-    private final String defaultValue;
     private final ButtonGroup group;
     private StepSegmentImp stepSegment;
 
     public RadioStep(String key, String name, String[] radioNames, String defaultValue) {
         this.key = key;
         this.name = name;
-        this.defaultValue = defaultValue;
         root.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
         group = new ButtonGroup();
 

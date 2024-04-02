@@ -1,6 +1,8 @@
 package cn.itscloudy.infocommit.util;
 
 import com.intellij.util.ui.JBUI;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -26,23 +28,22 @@ public class TextPrompt extends JLabel implements FocusListener, DocumentListene
     public enum Show {
         ALWAYS,
         FOCUS_GAINED,
-        FOCUS_LOST;
-
-
+        FOCUS_LOST
     }
+
     private final JTextComponent host;
     private final Document document;
 
+    @Getter
+    @Setter
     private Show show;
+    @Setter
     private boolean showPromptOnce;
 
     private int focusLost;
+
     public TextPrompt(String text, JTextComponent host) {
         this(text, host, Show.ALWAYS, true, null);
-    }
-
-    public TextPrompt(String text, JTextComponent host, Insets insets) {
-        this(text, host, Show.ALWAYS, false, insets);
     }
 
     public TextPrompt(String text, JTextComponent host, Show show, boolean useCompBorderInsets, Insets insets) {
@@ -67,99 +68,6 @@ public class TextPrompt extends JLabel implements FocusListener, DocumentListene
         host.setLayout(new BorderLayout());
         host.add(this);
         checkForPrompt();
-    }
-
-    public void addToHost() {
-        host.add(this);
-    }
-
-    public void uninstall() {
-        host.removeFocusListener(this);
-        document.removeDocumentListener(this);
-    }
-
-    /**
-     * Convenience method to change the alpha value of the current foreground
-     * Color to the specifice value.
-     *
-     * @param alpha value in the range of 0 - 1.0.
-     */
-    public void changeAlpha(float alpha) {
-        changeAlpha((int) (alpha * 255));
-    }
-
-    /**
-     * Convenience method to change the alpha value of the current foreground
-     * Color to the specifice value.
-     *
-     * @param alpha value in the range of 0 - 255.
-     */
-    public void changeAlpha(int alpha) {
-        alpha = alpha > 255 ? 255 : Math.max(alpha, 0);
-
-        Color foreground = getForeground();
-        int red = foreground.getRed();
-        int green = foreground.getGreen();
-        int blue = foreground.getBlue();
-
-        Color withAlpha = new Color(red, green, blue, alpha);
-        super.setForeground(withAlpha);
-    }
-
-    /**
-     * Convenience method to change the style of the current Font. The style
-     * values are found in the Font class. Common values might be:
-     * Font.BOLD, Font.ITALIC and Font.BOLD + Font.ITALIC.
-     *
-     * @param style value representing the the new style of the Font.
-     */
-    public void changeStyle(int style) {
-        setFont(getFont().deriveFont(style));
-    }
-
-    /**
-     * Get the Show property
-     *
-     * @return the Show property.
-     */
-    public Show getShow() {
-        return show;
-    }
-
-    /**
-     * Set the prompt Show property to control when the promt is shown.
-     * Valid values are:
-     * <p>
-     * Show.AWLAYS (default) - always show the prompt
-     * Show.Focus_GAINED - show the prompt when the component gains focus
-     * (and hide the prompt when focus is lost)
-     * Show.Focus_LOST - show the prompt when the component loses focus
-     * (and hide the prompt when focus is gained)
-     *
-     * @param show a valid Show enum
-     */
-    public void setShow(Show show) {
-        this.show = show;
-    }
-
-    /**
-     * Get the showPromptOnce property
-     *
-     * @return the showPromptOnce property.
-     */
-    public boolean getShowPromptOnce() {
-        return showPromptOnce;
-    }
-
-    /**
-     * Show the prompt once. Once the component has gained/lost focus
-     * once, the prompt will not be shown again.
-     *
-     * @param showPromptOnce when true the prompt will only be shown once,
-     *                       otherwise it will be shown repeatedly.
-     */
-    public void setShowPromptOnce(boolean showPromptOnce) {
-        this.showPromptOnce = showPromptOnce;
     }
 
     /**

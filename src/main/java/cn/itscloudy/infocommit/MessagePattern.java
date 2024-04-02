@@ -68,8 +68,8 @@ public abstract class MessagePattern {
                     try {
                         String[] command = optionsString.substring(2, optionsString.length() - 1).split(" ");
                         CmdUtil.Result run = CmdUtil.run(Arrays.stream(command).collect(Collectors.toList()));
-                        if (run.getExitValue() == 0) {
-                            defaultValue = run.getOutput();
+                        if (run.exitValue() == 0) {
+                            defaultValue = run.output();
                         }
                     } catch (IOException e) {
                         IcNotifier.error(project, "Failed to resolve default value for " + key +
@@ -109,13 +109,7 @@ public abstract class MessagePattern {
         }
     }
 
-    private static class TextSegment implements MessagePatternSegment {
-        private final String value;
-
-        TextSegment(String value) {
-            this.value = value;
-        }
-
+    private record TextSegment(String value) implements MessagePatternSegment {
         @Override
         public String getSegmentValue() {
             return value;
