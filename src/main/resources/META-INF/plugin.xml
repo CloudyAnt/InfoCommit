@@ -10,8 +10,8 @@
     <extensions defaultExtensionNs="com.intellij">
         <postStartupActivity implementation="cn.itscloudy.infocommit.context.IcStartupActivity"/>
         <checkinHandlerFactory implementation="cn.itscloudy.infocommit.IcCheckinHandlerFactory"/>
-        <applicationConfigurable groupId="tools" displayName="InfoCommit" id="com.nnthink.aixcoder.config.Config"
-                                 instance="cn.itscloudy.infocommit.config.Config"/>
+        <projectConfigurable groupId="tools" displayName="InfoCommit" id="com.nnthink.aixcoder.config.ProjectConfig"
+                                 instance="cn.itscloudy.infocommit.config.ProjectConfig"/>
     </extensions>
     <actions>
         <action class="cn.itscloudy.infocommit.IcAction"

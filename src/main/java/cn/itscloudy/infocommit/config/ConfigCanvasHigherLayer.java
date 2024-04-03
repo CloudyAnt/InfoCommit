@@ -6,11 +6,11 @@ import javax.swing.*;
 
 public class ConfigCanvasHigherLayer {
 
-    private final Config config;
+    private final ProjectConfig projectConfig;
     @Getter
     private JPanel root;
 
-    public ConfigCanvasHigherLayer(Config config) {
-        this.config = config;
+    public ConfigCanvasHigherLayer(ProjectConfig projectConfig) {
+        this.projectConfig = projectConfig;
     }
 }

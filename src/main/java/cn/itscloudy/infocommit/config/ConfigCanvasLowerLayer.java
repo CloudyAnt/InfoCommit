@@ -7,12 +7,12 @@ import java.awt.*;
 
 public class ConfigCanvasLowerLayer {
 
-    private final Config config;
+    private final ProjectConfig projectConfig;
     @Getter
     private JPanel root;
 
-    public ConfigCanvasLowerLayer(Config config) {
-        this.config = config;
+    public ConfigCanvasLowerLayer(ProjectConfig projectConfig) {
+        this.projectConfig = projectConfig;
         root.setLayout(new FlowLayout(FlowLayout.LEFT));
     }
 }

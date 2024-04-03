@@ -15,6 +15,7 @@ public interface IcConst {
     String ID = "InfoCommit";
     String NAME = ID;
     String MESSAGE_SIGN = "@";
+    String PATTEN_FILE_NAME = ".infoCommitPattern";
 
     Font DEF_FONT = new Font(null, Font.PLAIN, 12);
 
