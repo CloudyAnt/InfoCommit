@@ -1,7 +1,6 @@
 package cn.itscloudy.infocommit;
 
-import cn.itscloudy.infocommit.util.SwingUtil;
-import com.intellij.openapi.project.Project;
+import cn.itscloudy.infocommit.ui.RoundCornerBorder;
 import com.intellij.openapi.ui.popup.*;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -13,8 +12,7 @@ import java.awt.event.MouseEvent;
 
 public class Display {
     private static final String PATTERN_HEAD = " " + IcConst.get("pattern") + " ";
-    public static final Color ACCENT_COLOR = SwingUtil.decodeColor("#CA8265", "#4E94DA");
-    public static final Color BORDER_COLOR = SwingUtil.decodeColor("#F8A662", "#6391F9");
+
 
     @Getter
     private JPanel root;
@@ -22,20 +20,19 @@ public class Display {
     private JPanel amendModeNotice;
     private JLabel amendModeNoticeLabel;
     private final JLabel patternLabel;
-    private final JLabel patternHead;
 
     private final StepCacheResolver stepCacheResolver;
-    private final Pattern pattern;
+    private final MessagePattern messagePattern;
     private final ComponentPopupBuilder prefixConfigPopupBuilder;
     @Getter
     private boolean amendMode = false;
 
-    public Display(@NotNull Project project, @NotNull String basePath) {
-        this.stepCacheResolver = new StepCacheResolver(basePath);
-        this.pattern = new Pattern(project, stepCacheResolver);
-        Form form = new Form(pattern);
+    Display(@NotNull IcProjectContext context) {
+        this.stepCacheResolver = context.getStepCacheResolver();
+        this.messagePattern = context.getMessagePattern();
+        Form form = new Form(messagePattern);
 
-        root.setBorder(new RoundCornerBorder(6, 1, BORDER_COLOR));
+        root.setBorder(new RoundCornerBorder(6, 1, IcUI.BORDER_COLOR));
         JPanel configPane = form.getRoot();
         prefixConfigPopupBuilder = JBPopupFactory.getInstance().createComponentPopupBuilder(configPane, configPane)
                 .setResizable(true)
@@ -45,15 +42,15 @@ public class Display {
 
         displayPane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
-        patternHead = new JLabel();
+        JLabel patternHead = new JLabel();
         patternHead.setText(PATTERN_HEAD);
         patternHead.setOpaque(true);
-        patternHead.setBackground(ACCENT_COLOR);
+        patternHead.setBackground(IcUI.ACCENT_COLOR);
 
         patternLabel = new JLabel() {
             @Override
             public void setForeground(Color fg) {
-                setText(pattern.toDisplayString());
+                setText(messagePattern.toDisplayString());
             }
         };
         updateLabel();
@@ -76,17 +73,17 @@ public class Display {
     }
 
     public void updateLabel() {
-        patternLabel.setText(pattern.toDisplayString());
+        patternLabel.setText(messagePattern.toDisplayString());
     }
 
     public void updateCache() {
         updateLabel();
-        stepCacheResolver.update(pattern);
-        pattern.acceptAll();
+        stepCacheResolver.update(messagePattern);
+        messagePattern.acceptAll();
     }
 
     public String instrumentMessage(String message) {
-        return pattern.instrument(message);
+        return messagePattern.instrument(message);
     }
 
     public void setAmendMode(boolean amendMode) {

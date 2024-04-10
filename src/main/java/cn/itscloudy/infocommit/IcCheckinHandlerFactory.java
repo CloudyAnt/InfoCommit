@@ -1,13 +1,9 @@
 package cn.itscloudy.infocommit;
 
-import cn.itscloudy.infocommit.context.IcProjectContext;
-import cn.itscloudy.infocommit.context.IcProjectContextManager;
-import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vcs.CheckinProjectPanel;
 import com.intellij.openapi.vcs.changes.CommitContext;
 import com.intellij.openapi.vcs.checkin.CheckinHandler;
 import com.intellij.openapi.vcs.checkin.CheckinHandlerFactory;
-import com.intellij.util.keyFMap.KeyFMap;
 import org.jetbrains.annotations.NotNull;
 
 public class IcCheckinHandlerFactory extends CheckinHandlerFactory {

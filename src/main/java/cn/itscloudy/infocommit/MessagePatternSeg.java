@@ -1,6 +1,8 @@
 package cn.itscloudy.infocommit;
 
+import cn.itscloudy.infocommit.ui.RoundCornerBorder;
 import cn.itscloudy.infocommit.util.CmdUtil;
+import cn.itscloudy.infocommit.util.SwingUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
 import lombok.Getter;
@@ -16,12 +18,12 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-public abstract class Seg {
+public abstract class MessagePatternSeg {
 
-    Seg prev;
-    Seg next;
+    MessagePatternSeg prev;
+    MessagePatternSeg next;
 
-    public boolean isCommitMessage() {
+    public boolean isInputMessage() {
         return false;
     }
 
@@ -33,21 +35,27 @@ public abstract class Seg {
 
     abstract String getSegmentValue();
 
+    public String toHtmlString() {
+        String color = SwingUtil.color2Hex(IcUI.SHADDW_COLOR);
+        return getSegmentValue()
+                .replace(" ", "<span style=\"background-color: " + color + "\">&nbsp;</span>");
+    }
+
     protected static JLabel createConfigLabel(String text, Color foreground, Color borderColor) {
         JLabel l = new JLabel(text);
-        l.setFont(IcConst.DEF_FONT);
+        l.setFont(IcUI.DEF_FONT);
         l.setBorder(new RoundCornerBorder(10, 1, borderColor));
         l.setForeground(foreground);
         return l;
     }
 
-    public static Seg resolve(Project project, StepCacheResolver cacheResolver, String expression) {
+    public static MessagePatternSeg resolve(Project project, StepCacheResolver cacheResolver, String expression) {
         if (expression.equals(IcConst.MESSAGE_SIGN)) {
-            return new CommitMessaegeSeg();
+            return new InputMessagePatternSeg();
         }
         String key = findSegKey(expression);
         if (key == null) {
-            return new TextSeg(expression);
+            return new TextMessagePatternSeg(expression);
         }
 
         String defaultValue = cacheResolver.get(key);
@@ -99,28 +107,34 @@ public abstract class Seg {
         return null;
     }
 
-    private static class CommitMessaegeSeg extends Seg {
+    private static class InputMessagePatternSeg extends MessagePatternSeg {
         @Override
-        public boolean isCommitMessage() {
+        public boolean isInputMessage() {
             return true;
         }
 
         @Override
         @NotNull
         JLabel getConfigLabel() {
-            return createConfigLabel(IcConst.MESSAGE_SIGN, Display.ACCENT_COLOR, Display.BORDER_COLOR);
+            return createConfigLabel(IcConst.MESSAGE_SIGN, IcUI.ACCENT_COLOR, IcUI.BORDER_COLOR);
         }
 
         @Override
         String getSegmentValue() {
             return IcConst.MESSAGE_SIGN;
         }
+
+        @Override
+        public String toHtmlString() {
+            String color = SwingUtil.color2Hex(IcUI.ACCENT_COLOR);
+            return "<span style=\"color: " + color + "\">" + IcConst.MESSAGE_SIGN + "</span>";
+        }
     }
 
-    private static class TextSeg extends Seg {
+    private static class TextMessagePatternSeg extends MessagePatternSeg {
         private final String text;
 
-        TextSeg(String text) {
+        TextMessagePatternSeg(String text) {
             this.text = text;
         }
 

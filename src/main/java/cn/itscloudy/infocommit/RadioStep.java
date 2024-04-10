@@ -54,9 +54,9 @@ public class RadioStep extends Step {
     @Override
     @NotNull
     JLabel getConfigLabel() {
-        JLabel label = createConfigLabel(name, JBColor.WHITE, Display.BORDER_COLOR);
+        JLabel label = createConfigLabel(name, JBColor.WHITE, IcUI.BORDER_COLOR);
         label.setOpaque(true);
-        label.setBackground(Display.ACCENT_COLOR);
+        label.setBackground(IcUI.ACCENT_COLOR);
         return label;
     }
 

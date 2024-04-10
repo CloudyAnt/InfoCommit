@@ -1,4 +1,4 @@
-package cn.itscloudy.infocommit.context;
+package cn.itscloudy.infocommit;
 
 import cn.itscloudy.infocommit.util.CmdUtil;
 import com.intellij.openapi.project.Project;
@@ -32,7 +32,7 @@ public class IcStartupActivity implements StartupActivity {
             return;
         }
 
-        IcProjectContextManager.openProject(project);
+        IcProjectContextManager.createForProject(project);
         POST_PROJECT_STARTUP_TASKS.forEach(task -> task.accept(IcProjectContextManager.getInstance(project)));
     }
 

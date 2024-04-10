@@ -8,7 +8,7 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.lang</depends>
     <extensions defaultExtensionNs="com.intellij">
-        <postStartupActivity implementation="cn.itscloudy.infocommit.context.IcStartupActivity"/>
+        <postStartupActivity implementation="cn.itscloudy.infocommit.IcStartupActivity"/>
         <checkinHandlerFactory implementation="cn.itscloudy.infocommit.IcCheckinHandlerFactory"/>
         <projectConfigurable groupId="tools" displayName="InfoCommit" id="com.nnthink.aixcoder.config.ProjectConfig"
                                  instance="cn.itscloudy.infocommit.config.ProjectConfig"/>

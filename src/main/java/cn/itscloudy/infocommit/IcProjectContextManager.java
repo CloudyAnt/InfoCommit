@@ -1,4 +1,4 @@
-package cn.itscloudy.infocommit.context;
+package cn.itscloudy.infocommit;
 
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +10,7 @@ public class IcProjectContextManager {
 
     private static final Map<Project, IcProjectContext> MAP = new HashMap<>();
 
-    public static void openProject(@NotNull Project project) {
+    static void createForProject(@NotNull Project project) {
         MAP.entrySet().removeIf(entry -> entry.getKey().isDisposed());
         getInstance(project).loaded = true;
     }

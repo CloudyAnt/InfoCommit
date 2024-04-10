@@ -10,9 +10,9 @@ public class FormStep {
     private JLabel name;
     private JPanel contentHolder;
 
-    public FormStep(String name, JComponent content) {
+    FormStep(String name, JComponent content) {
         this.name.setText(name);
-        this.contentHolder.setLayout(IcLayouts.FULL);
+        this.contentHolder.setLayout(IcUI.FULL_LAYOUT);
         this.contentHolder.add(content);
     }
 }

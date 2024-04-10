@@ -1,7 +1,5 @@
 package cn.itscloudy.infocommit;
 
-import cn.itscloudy.infocommit.context.IcProjectContext;
-import cn.itscloudy.infocommit.context.IcProjectContextManager;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;

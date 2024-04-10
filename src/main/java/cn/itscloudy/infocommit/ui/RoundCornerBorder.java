@@ -1,12 +1,13 @@
-package cn.itscloudy.infocommit;
+package cn.itscloudy.infocommit.ui;
 
+import cn.itscloudy.infocommit.util.SwingUtil;
 import com.intellij.util.ui.JBUI;
 
 import javax.swing.*;
 import javax.swing.border.AbstractBorder;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
-import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import java.util.Objects;
 
@@ -43,7 +44,8 @@ public class RoundCornerBorder extends AbstractBorder {
         int w = thickness == 1 ? width - 1 : width;
         int h = thickness == 1 ? height - 1 : height;
 
-        Area outer = getRoundRectangle(w, h, r, 0);
+        Area outer = SwingUtil.getRoundRectangle(w, h, r, 0);
+        outer.transform(AffineTransform.getTranslateInstance(x, y));
         if (c instanceof JPopupMenu) {
             g2.setPaint(c.getBackground());
             g2.fill(outer);
@@ -64,32 +66,12 @@ public class RoundCornerBorder extends AbstractBorder {
             g2.setStroke(new BasicStroke(thickness));
             g2.draw(outer);
         } else {
-            Area inner = getRoundRectangle(w, h, r, thickness);
+            Area inner = SwingUtil.getRoundRectangle(w, h, r, thickness);
+            inner.transform(AffineTransform.getTranslateInstance(x, y));
             outer.subtract(inner);
             g2.setPaint(borderColor);
             g2.fill(outer);
         }
         g2.dispose();
-    }
-
-    private Area getRoundRectangle(int width, int height, int radius, int offset) {
-        radius = radius - offset;
-        GeneralPath path = new GeneralPath();
-        path.moveTo(radius + offset, offset);
-        path.quadTo(offset, offset, offset, radius + offset);
-
-        int bottom = height - offset;
-        path.lineTo(offset, height - radius - offset);
-        path.quadTo(offset, bottom, radius + offset, bottom);
-
-        int right = width - offset;
-        path.lineTo(right - radius, bottom);
-        path.quadTo(right, bottom, right, bottom - radius);
-
-        path.lineTo(right, radius + offset);
-        path.quadTo(right, offset, right - radius, offset);
-
-        path.closePath();
-        return new Area(path);
     }
 }

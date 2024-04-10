@@ -1,7 +1,6 @@
 package cn.itscloudy.infocommit.config;
 
-import cn.itscloudy.infocommit.IcConst;
-import cn.itscloudy.infocommit.IcLayouts;
+import cn.itscloudy.infocommit.*;
 import cn.itscloudy.infocommit.util.FilledLayeredPane;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
@@ -14,14 +13,31 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ProjectConfig implements SearchableConfigurable {
-    private final Project project;
     private JPanel root;
     private JLayeredPane canvas;
     private JLabel introduction;
+    private final ProjectConfigCanvasLower canvasLower;
+    private final ProjectConfigCanvasHigher canvasHigher;
 
     ProjectConfig(@NotNull Project project) {
-        this.project = project;
+        IcProjectContext context = IcProjectContextManager.getInstance(project);
         introduction.setFont(new Font(null, Font.PLAIN, 16));
+        MessagePattern messagePattern = context.getMessagePattern();
+
+        FilledLayeredPane canvas = (FilledLayeredPane) this.canvas;
+        canvasLower = new ProjectConfigCanvasLower(this, messagePattern);
+        canvasHigher = new ProjectConfigCanvasHigher(this);
+
+        canvasLower.higher = canvasHigher;
+        canvasHigher.lower = canvasLower;
+
+        JPanel lowerLayer = canvas.getLayerPanel(1);
+        lowerLayer.setLayout(IcUI.FULL_LAYOUT);
+        lowerLayer.add(canvasLower.getRoot());
+
+        JPanel higherLayer = canvas.getLayerPanel(2);
+        higherLayer.setLayout(new GridLayout(1, 1));
+        higherLayer.add(canvasHigher.getRoot());
     }
 
     @Override
@@ -50,17 +66,6 @@ public class ProjectConfig implements SearchableConfigurable {
     }
 
     private void createUIComponents() {
-        FilledLayeredPane canvas = new FilledLayeredPane(2);
-        this.canvas = canvas;
-        ConfigCanvasHigherLayer canvasHigherLayer = new ConfigCanvasHigherLayer(this);
-        ConfigCanvasLowerLayer canvasLowerLayer = new ConfigCanvasLowerLayer(this);
-        JPanel lower = canvas.getLayerPanel(1);
-        lower.setLayout(IcLayouts.FULL);
-        lower.add(canvasLowerLayer.getRoot());
-
-        JPanel higher = canvas.getLayerPanel(2);
-        higher.setLayout(IcLayouts.FULL);
-        higher.add(canvasHigherLayer.getRoot());
-
+        this.canvas = new FilledLayeredPane(2);
     }
 }

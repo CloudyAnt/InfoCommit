@@ -15,7 +15,7 @@ public class StepCacheResolver {
 
     @SneakyThrows
     public StepCacheResolver(@NotNull String basePath) {
-        this.path = Path.of(basePath, ".git", "infoCommitSteps");
+        this.path = Path.of(basePath, ".git", IcConst.STEP_CACHE_FILE_NAME);
         File file = path.toFile();
         if (file.isFile()) {
             String cache = Files.readString(path);
@@ -27,8 +27,8 @@ public class StepCacheResolver {
         }
     }
 
-    public void update(Pattern pattern) {
-        pattern.iterateOverSteps(step -> cache.put(step.getKey(), step.getSegmentValue()));
+    public void update(MessagePattern messagePattern) {
+        messagePattern.iterateOverSteps(step -> cache.put(step.getKey(), step.getSegmentValue()));
         writeIntoFile();
     }
 
@@ -44,8 +44,8 @@ public class StepCacheResolver {
         }
     }
 
-
     public String get(String key) {
         return cache.get(key);
     }
+
 }

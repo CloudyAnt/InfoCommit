@@ -13,9 +13,9 @@ public class Form {
     private JPanel root;
     private JPanel steps;
     private JLabel bottomLabel;
-    private final Pattern messagePattern;
+    private final MessagePattern messagePattern;
 
-    public Form(@NotNull Pattern messagePattern) {
+    Form(@NotNull MessagePattern messagePattern) {
         this.messagePattern = messagePattern;
         steps.setLayout(new VerticalLayout(10));
         bottomLabel.setText(IcConst.get("providedBy"));

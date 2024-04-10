@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
-public abstract class Step extends Seg {
+public abstract class Step extends MessagePatternSeg {
 
     private final String key;
 

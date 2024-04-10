@@ -2,7 +2,6 @@ package cn.itscloudy.infocommit;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -15,9 +14,9 @@ public interface IcConst {
     String ID = "InfoCommit";
     String NAME = ID;
     String MESSAGE_SIGN = "@";
-    String PATTEN_FILE_NAME = ".infoCommitPattern";
 
-    Font DEF_FONT = new Font(null, Font.PLAIN, 12);
+    String PATTEN_FILE_NAME = ".infoCommitPattern";
+    String STEP_CACHE_FILE_NAME = "infoCommitSteps";
 
     Map<String, String> LOCALES = new HashMap<>();
     Pattern VAR_PATTERN = Pattern.compile("\\$\\{([^}]+)}");
