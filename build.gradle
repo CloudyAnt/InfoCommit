@@ -7,7 +7,7 @@ if (file('./local.gradle').exists()) {
     apply from: 'local.gradle'
 }
 
-group 'cn.itscloudy'
+group 'cn.itscloudy.infocommit'
 version '1.0.3'
 repositories {
     mavenCentral()

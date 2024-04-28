@@ -103,9 +103,9 @@ public class ArrowBubbleBorder extends AbstractBorder {
         public final int yOff;
         public final int wOff;
         public final int hOff;
-        private final ArrowCreator<Integer, Integer, Integer> arrowCreator;
+        private final ArrowCreator arrowCreator;
 
-        Direction(int xOff, int yOff, int wOff, int hOff, ArrowCreator<Integer, Integer, Integer> arrowCreator) {
+        Direction(int xOff, int yOff, int wOff, int hOff, ArrowCreator arrowCreator) {
             this.xOff = xOff;
             this.yOff = yOff;
             this.wOff = wOff;
@@ -114,7 +114,7 @@ public class ArrowBubbleBorder extends AbstractBorder {
         }
     }
 
-    private interface ArrowCreator<W, H, AH> {
-        Area create(W w, H h, AH AH);
+    private interface ArrowCreator {
+        Area create(Integer w, Integer h, Integer ah);
     }
 }
